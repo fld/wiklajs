@@ -3,26 +3,98 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>wiklajs2015 - Best Practices</title>
+  <style>
+    body {
+      width: 800px;
+      word-wrap: break-word;
+    }
+  </style>
 </head>
 
 <body>
   <summary>
     <h1>wiklajs2015 - Best Practices</h1>
     <p>Ohjelmointitekniikka (JavaScript): harjoitukset 2015</p>
-    <h2>Working group info:</h2>
-    <p>Group #3 (to 16-18) / 6. Rekilä(1)</p>
+    <h3>Working group:</h3>
+    <ul><li>Group #3 (to 16-18) / 6. Rekilä(1)</li></ul>
   </summary>
   <br>
   
   <section>
-    <h2>Week 1 (2.-8.11.)</h2>
-    <p>This weeks assignment is to explore the loose dynamic typing used by JavaScript</p>
-    <p>Loose dynamic typing simply means that JavaScript uses no static type declarations (like: int, float, string, etc...) when defining variables.</p>
+    <h2>Week 2 (9.-13.11)</h2>
+    <p>This weeks assignment is to explore the loose dynamic typing used by JavaScript.</p>
+    <p>Loose dynamic typing simply means that JavaScript uses no static type declarations (like: int, float, string, 
+    etc...) when defining variables.</p>
     <p>So, in JavaScript, this is perfectly acceptable:</p>
     <pre>
-      var myVar = true;
-      myVar = 42;
-      myVar = 'Hello';
+      var myVar = true; // JS considers myVar as a Boolean now
+      myVar = 42;       // Now it's a Number
+      myVar = 'Hello';  // Now it's a String
+      myVar = 11.5;     // And now it's a Number again
+    </pre>
+    <h4>Primitive data types:</h4>
+    <p>Like shown above, JavaScript dynamically (during execution) decides the type of a variable, based on it's 
+    contents.</p>
+    <p>The most important Primitive Data Types in JavaScript are:</p>
+    <h5>Boolean</h5>
+    <p>Either true or false</p>
+    <h5>undefined</h5>
+    <p>Initial value for all variables, set by the JavaScript-engine. It's a good practice to never define a variable 
+    as undefined by yourself. (use null instead)</p>
+    <h5>null</h5>
+    <p>A literal, representing an empty variable.</p>
+    <h5>Number</h5>
+    <p>A numerical value. Supports integers, decimal values and exponent notation. Internally, JavaScript
+    stores all numbers as double precision floating point numbers. (IEEE 754 standard)</p>
+    <h5>String</h5>
+    <p>A sequence of characters.</p>
+    <br>
+    <h4>Checking for types:</h4>
+    <p>This is a matter, where attention to detail is extremely important, because of the devestating security 
+    implications of choosing the wrong way to check for types!</p>
+    <p>Whichever function you choose to use in practice, it is always good idea to have a true/false table demonstrating
+    the actual behaviour of the function with different possible inputs</p>
+    <p>If you want to check the primitive type of a variable, it is possible via. the 'typeof' operator like so:</p>
+    <pre>
+      typeof "Hello"    // "string"
+      typeof 42         // "number"
+      typeof false      // "boolean"
+      typeof undefined  // "undefined"
+      typeof (typeof 1) // "string"
+    </pre>
+    <p>Seems simple enough? Well, here are the common pitfalls that will make you respect the idea of being careful
+    when checking for types:</p>
+    <pre>
+      typeof null               // "object", (oh, were you expecting "null"?)
+      typeof NaN                // "number", (NaN stands for Not-A-Number, hehe)
+      typeof new Boolean(true)  // "object"
+      typeof Boolean(true)      // "boolean" 
+      typeof {}                 // "object"
+      typeof []                 // "object"
+      typeof function(){}       // "function"
+    </pre>
+    <p>These can be really hard to remember/easy to forget, so I would recommend having fast access to the equality
+    tables like:</p>
+    <ul>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_samenessa</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof</a></li>
+      <li><a href="https://api.jquery.com/jQuery.isNumeric/">https://api.jquery.com/jQuery.isNumeric/</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN</a></li>
+    </ul>
+    <p>While it is possible to bake your own checking functions like:</p>
+    <pre>
+      function isNum(i) { return !isNaN(i) && typeof i === "number"; }
+      function isString(s) { return typeof s === "string"; }
+      function isStringArr(a) { return isArray(a) && a.every(isString); }
+    </pre>
+    <p>But I would argue that it is better practice to use existing, well tested & proven library functions, like what
+    can be found in jQuery for example:</p>
+    <p>Here's a few examples using the jQuery API's <a href="https://api.jquery.com/jQuery.type/">type()-function:</a></p>
+    <pre>
+      jQuery.type(null)           // "null"
+      jQuery.type(new Number(1))  // "number"
+      jQuery.type(new Date())     // "date"
+      jQuery.type(/hello/)        // "regexp"
     </pre>
   </section>
   
