@@ -17,10 +17,20 @@
     <p>Ohjelmointitekniikka (JavaScript): harjoitukset 2015</p>
     <h3>Working group:</h3>
     <ul><li>Group #3 (to 16-18) / 6. Rekilä(1)</li></ul>
+    <h3>Shortcuts:</h3>
+    <ul>
+      <li><a href="#week1">Week 1</a></li>
+      <li><a href="#week2">Week 2</a></li>
+      <li><a href="#week3">Week 3</a></li>
+    </ul>
   </summary>
-  <br>
   
-  <section>
+  <section id="week1">
+    <h2>Week 1 (2.-8.11)</h2>
+    <p>A comparison between JSbin, JSfiddle and Codepen:</p>
+    <a href="http://voidcanvas.com/jsbin-jsfiddle-or-codepen-which-one-to-use-and-why/">http://voidcanvas.com/jsbin-jsfiddle-or-codepen-which-one-to-use-and-why/</a>
+  </section>
+  <section id="week2">
     <h2>Week 2 (9.-13.11)</h2>
     <p>This weeks assignment is to explore the loose dynamic typing used by JavaScript.</p>
     <p>Loose dynamic typing simply means that JavaScript uses no static type declarations (like: int, float, string, 
@@ -95,6 +105,151 @@
       jQuery.type(new Number(1))  // "number"
       jQuery.type(new Date())     // "date"
       jQuery.type(/hello/)        // "regexp"
+    </pre>
+  </section>
+  <section id="week3">
+    <h2>Week 3 (16.-20.11)</h2>
+    <h3>Type coercion:</h3>
+    <p>Last week we learned that Javascript is a loosely typed language. Type coercion is a closely related and 
+    extremely important concept to understand if you plan to write safe Javascript code.</p>
+    <p>Type coercion happens when the Javascript engine performs an operation with two operands of different type. One 
+    of the operands will automatically be converted to something matching the other operands type, based on rules 
+    defined in the Javascript engine itself. Understanding and knowing these rules by heart is essential for safe
+    programming.</p>
+    <p>This is how it works:</p>
+    <pre>
+      var a = "2";
+      var b = 2;
+      a == b              // true
+      
+      var a = "";
+      var b = false;
+      var c = 0;
+      a == b              // true
+      a == c              // true
+      
+      var text = "Hello ";
+      var numb = 42;
+      (text+numb)         // "Hello 42"
+      
+      // And here's a fun one to make you see the dangers
+      null < 1            // true
+      null == 0           // false
+    </pre>
+    <p>These were examples of Javascripts type coercion in action when using the loose equality operator: '=='. Here is
+    an example how type coercion might bite a programmer in practice:</p>
+    <pre>
+      function printMe(text) {
+          if (text != "") {
+              console.log('Got text: '+text);
+          }
+      }
+
+      printMe(); // Got text: undefined
+    </pre>
+    <p>When you don't want this type of behaviour (most of the times?), you should use the strict equality/inequality
+    operators '===' and '!==':</p>
+    <pre>
+      2 === 2         // true
+      "2" === 2       // false
+      0 === false     // false
+    </pre>
+    <a>A great addition to our last weeks list of very useful tables:</a>
+    <ul><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence</a></li></ul>
+    <h3>Programming style:</h3>
+    <p><a href="http://latentflip.com/imperative-vs-declarative/">There</a> 
+    <a href="https://blog.jcoglan.com/2013/03/30/callbacks-are-imperative-promises-are-functional-nodes-biggest-missed-opportunity/">is</a> <a href="http://codenugget.co/2015/03/05/declarative-vs-imperative-programming-web.html">so</a> <a href="http://www.tysoncadenhead.com/blog/the-state-of-javascript-a-shift-from-imperative-to-declarative">much</a> <a href="https://programmers.stackexchange.com/questions/127672/is-javascript-a-functional-programming-language">complicated discussion</a> about how different programming paradigms/styles affect Javascript development.
+    And I don't pretend to understand it very well. But what I do understand, that Javascript allows for a variety of
+    different programming styles and that it is what makes the language so interesting and popular for many of us.</p>
+    <p>Perhaps the answer is for everyone to find out what style suites their brain or target audience and use that?</p>
+    <h3>Closures:</h3>
+    <p>To understand closures, one needs to understand that in Javascript, it is possible to define functions within a function 
+    and it is possible for a function to return a function and it is possible to store those returned functions in a variable.</p>
+    <p>Closures are a way of keeping the local variables for a function alive even after the function has returned.</p>
+    <p>This is the example I created for myself to help understand closures. I would highly recommend everyone to write
+    their own examples that work for them. It really is the best way to learn closures IMHO.</p>
+    <pre>
+      function createFunc(type) {
+
+          if (type == "add") {
+              return function(a) {
+                  return function(b) {
+                      return a+b;
+                  }
+              }
+          }
+          
+          else if (type == "mult") {
+              return function(a) {
+                  return function(b) {
+                      return a*b;
+                  }
+              }
+          }
+      }
+      
+      var adder = createFunc("add");
+      adder = adder(1);
+      adder = adder(2);
+      console.log(adder);     // 3
+
+      var mult = createFunc("mult");
+      mult = mult(2);
+      mult = mult(3);
+      console.log(mult);      // 6
+    </pre>
+    <p><q>It is kind of like keeping a stack-frame in memory when the outer function exits!</q>- <a href="https://stackoverflow.com/questions/111102/how-do-javascript-closures-work">Stack overflow</a></p>
+    <p>Simple, powerful and SO cool!</p>
+    <h3>Exception handling:</h3>
+    <p>Exception handling is a way to control the flow of execution of a program, in situations where the execution of 
+    a function can not proceed normally.</p>
+    <p>Exception handling should be used when ever you write a piece of code that:</p>
+    <ul>
+      <li>You know that it can fail to execute properly</li>
+      <li>You know the ways in which it can fail</li>
+      <li>You have ways to detect these failures</li>
+      <li>You can do something smart about it</li>
+    </ul>
+    <p>The exception handling could just be a simple if(){}-block (or multiple if-blocks) in the function or it could be 
+    a more sophisticated try...catch statement with multiple different exception handlers for handling more complex
+    scenarios. The programmer should decide and choose a way that best suites the current and future needs. For simple
+    stuff, a bunch of 'if' statements could do the trick, but for more complicated stuff it may be cleaner to use the
+    try...catch statemets.</p>
+    <p>Here is an example how try...catch could be used in Javascript:</p>
+    <pre>
+      var url = "http://blah.com/stuff.zip"
+      var url2 = "http://backup.com/stuff.zip"
+
+      fetchFromTheInternet() {
+          var data = get(url);
+          
+          if (data === "Timed out!")
+              throw "timedOut";
+          else
+              return data;
+              
+          return null;
+      }
+
+      function unzip() {
+          var data;
+          
+          try {
+              data = fetchFromTheInternet();
+          } catch (e) {
+              if (e === "timedOut") {
+                  url = url2;
+                  data = fetchFromTheInternet();
+              }
+          }
+          
+          if (data === null)
+              return null;
+              
+          // do unzip stuff...
+          
+          return data;
+      }
     </pre>
   </section>
   
